@@ -1,0 +1,74 @@
+﻿@model IEnumerable<NguyenKimHoangAnh.Context.Category>
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="max-age=604800" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>@ViewBag.Title - Website</title>
+
+    <link href="~/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+    <!-- jQuery -->
+    <script src="~/js/jquery-2.0.0.min.js" type="text/javascript"></script>
+
+    <!-- Bootstrap4 files-->
+    <script src="~/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <link href="~/css/bootstrap.css" rel="stylesheet" type="text/css" />
+
+    <!-- Font awesome 5 -->
+    <link href="~/fonts/fontawesome/css/all.min.css" type="text/css" rel="stylesheet">
+
+    <!-- custom style -->
+    <link href="~/css/ui.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/responsive.css" rel="stylesheet" type="text/css" />
+
+    <!-- custom javascript -->
+    <script src="~/js/script.js" type="text/javascript"></script>
+</head>
+<body>
+    <header class="section-header">
+        <!-- Nội dung tiêu đề hiện tại -->
+    </header>
+
+    <section class="section-content padding-y">
+        <div class="container">
+            <h2>@ViewBag.Title</h2>
+
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.Name, "ProductsByCategory", new { categoryId = item.CategoryId })
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.CategoryId }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.CategoryId }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="section-footer">
+        <!-- Nội dung chân trang hiện tại -->
+    </footer>
+</body>
+</html>

@@ -1,0 +1,208 @@
+﻿@{
+    ViewBag.Title = "Categories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .card-category {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+        height: 250px; /* Điều chỉnh chiều cao của khung danh mục */
+        margin-bottom: 20px; /* Khoảng cách giữa các thẻ */
+        font-size: 0.875rem; /* Kích thước chữ nhỏ hơn */
+    }
+
+        .card-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    .img-wrap {
+        flex-shrink: 0; /* Đảm bảo phần hình ảnh không co lại */
+        height: 150px; /* Chiều cao của phần hình ảnh */
+    }
+
+        .img-wrap img {
+            width: 100%;
+            height: 100%; /* Đảm bảo hình ảnh chiếm toàn bộ chiều cao của phần chứa */
+            object-fit: cover;
+        }
+
+    .card-body {
+        padding: 10px; /* Điều chỉnh padding của phần card-body */
+        text-align: center;
+        flex-grow: 1; /* Đảm bảo phần card-body chiếm toàn bộ không gian còn lại */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Căn giữa nội dung trong card-body */
+    }
+
+    .card-title {
+        font-size: 1rem; /* Kích thước chữ tiêu đề nhỏ hơn */
+        font-weight: bold; /* Để chữ in đậm */
+        margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và nội dung */
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        // Handle adding product to cart when the form is submitted
+        $('.add-to-cart-form').on('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            var $form = $(this); // Get the current form object
+            var $message = $form.siblings('.product-message'); // Get the message element for the current product
+
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                data: $form.serialize(),
+                success: function (response) {
+                    // Display a message when the product is successfully added to the cart
+                    $message.text('Product has been added to the cart!').show();
+
+                    // Optional: Hide the message after a delay
+                    setTimeout(function () {
+                        $message.fadeOut();
+                    }, 3000);
+
+                    // Update the number of items in the cart
+                    if (response.Count > 0) {
+                        $('.widget-header .notify').text(response.Count).show(); // Update and show the count
+                    } else {
+                        $('.widget-header .notify').hide(); // Hide if no items
+                    }
+                },
+                error: function () {
+                    // Handle errors (optional)
+                    $message.text('An error occurred. Please try again.').show();
+
+                    // Optional: Hide the message after a delay
+                    setTimeout(function () {
+                        $message.fadeOut();
+                    }, 3000);
+                }
+            });
+        });
+    });
+</script>
+<body>
+    <!-- ========================= SECTION CONTENT ========================= -->
+    @model IEnumerable<NguyenKimHoangAnh.Context.Category>
+
+    <section class="section-content padding-y">
+        <div class="container">
+            <nav class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3">
+                        <div class="card card-category">
+                            <div class="img-wrap">
+                                <img src="~/images/pro/@item.ImageUrl" >
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    @Html.ActionLink(item.Name, "ProductsByCategory", new { categoryId = item.CategoryId }, new { @class = "btn btn-link" })
+                                </h4>
+                            </div>
+                        </div>
+                    </div> <!-- col.// -->
+                }
+            </nav> <!-- row.// -->
+        </div> <!-- container .// -->
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+    <!-- ========================= SECTION SUBSCRIBE  ========================= -->
+    <section class="padding-y-lg bg-light border-top">
+        <div class="container">
+
+            <p class="pb-2 text-center">Delivering the latest product trends and industry news straight to your inbox</p>
+
+            <div class="row justify-content-md-center">
+                <div class="col-lg-4 col-sm-6">
+                    <form class="form-row">
+                        <div class="col-8">
+                            <input class="form-control" placeholder="Your Email" type="email">
+                        </div> <!-- col.// -->
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-block btn-warning"> <i class="fa fa-envelope"></i> Subscribe </button>
+                        </div> <!-- col.// -->
+                    </form>
+                    <small class="form-text">We’ll never share your email address with a third-party. </small>
+                </div> <!-- col-md-6.// -->
+            </div>
+
+
+        </div>
+    </section>
+    <!-- ========================= SECTION SUBSCRIBE END// ========================= -->
+    <!-- ========================= FOOTER ========================= -->
+    <footer class="section-footer bg-secondary">
+        <div class="container">
+            <section class="footer-top padding-y-lg text-white">
+                <div class="row">
+                    <aside class="col-md col-6">
+                        <h6 class="title">Brands</h6>
+                        <ul class="list-unstyled">
+                            <li> <a href="#">Adidas</a></li>
+                            <li> <a href="#">Puma</a></li>
+                            <li> <a href="#">Reebok</a></li>
+                            <li> <a href="#">Nike</a></li>
+                        </ul>
+                    </aside>
+                    <aside class="col-md col-6">
+                        <h6 class="title">Company</h6>
+                        <ul class="list-unstyled">
+                            <li> <a href="#">About us</a></li>
+                            <li> <a href="#">Career</a></li>
+                            <li> <a href="#">Find a store</a></li>
+                            <li> <a href="#">Rules and terms</a></li>
+                            <li> <a href="#">Sitemap</a></li>
+                        </ul>
+                    </aside>
+                    <aside class="col-md col-6">
+                        <h6 class="title">Help</h6>
+                        <ul class="list-unstyled">
+                            <li> <a href="#">Contact us</a></li>
+                            <li> <a href="#">Money refund</a></li>
+                            <li> <a href="#">Order status</a></li>
+                            <li> <a href="#">Shipping info</a></li>
+                            <li> <a href="#">Open dispute</a></li>
+                        </ul>
+                    </aside>
+                    <aside class="col-md col-6">
+                        <h6 class="title">Account</h6>
+                        <ul class="list-unstyled">
+                            <li> <a href="#"> User Login </a></li>
+                            <li> <a href="#"> User register </a></li>
+                            <li> <a href="#"> Account Setting </a></li>
+                            <li> <a href="#"> My Orders </a></li>
+                        </ul>
+                    </aside>
+                    <aside class="col-md">
+                        <h6 class="title">Social</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#"> <i class="fab fa-facebook"></i> Facebook </a></li>
+                            <li><a href="#"> <i class="fab fa-twitter"></i> Twitter </a></li>
+                            <li><a href="#"> <i class="fab fa-instagram"></i> Instagram </a></li>
+                            <li><a href="#"> <i class="fab fa-youtube"></i> Youtube </a></li>
+                        </ul>
+                    </aside>
+                </div> <!-- row.// -->
+            </section>	<!-- footer-top.// -->
+
+            <section class="footer-bottom text-center">
+
+                <p class="text-white">Privacy Policy - Terms of Use - User Information Legal Enquiry Guide</p>
+                <p class="text-muted"> &copy 2019 Company name, All rights reserved </p>
+                <br>
+            </section>
+        </div><!-- //container -->
+    </footer>
+    <!-- ========================= FOOTER END // ========================= -->
+
+</body>
+</html>

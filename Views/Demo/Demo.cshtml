@@ -1,0 +1,120 @@
+﻿<!DOCTYPE HTML>
+<html lang="en">
+@{
+    ViewBag.Title = "Demo";
+}
+
+<h2>Demo</h2>
+
+
+@{ string[] members = { "Jani", "Hege", "Kai", "Jim" }; int j = Array.IndexOf(members, "Kai") + 1; int len = members.Length;
+    string x = members[2 - 1];
+}
+@{
+    var price = 31;
+}
+@{
+    var weekday = DateTime.Now.DayOfWeek;
+    var day = weekday.ToString();
+    var message = "";
+}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="max-age=604800" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Website title - bootstrap html template</title>
+
+    <link href="~/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+    <!-- jQuery -->
+    <script src="~/js/jquery-2.0.0.min.js" type="text/javascript"></script>
+
+    <!-- Bootstrap4 files-->
+    <script src="~/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <link href="~/css/bootstrap.css" rel="stylesheet" type="text/css" />
+
+    <!-- Font awesome 5 -->
+    <link href="~/fonts/fontawesome/css/all.min.css" type="text/css" rel="stylesheet">
+
+    <!-- custom style -->
+    <link href="~/css/ui.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/responsive.css" rel="stylesheet" type="text/css" />
+
+    <!-- custom javascript -->
+    <script src="~/js/script.js" type="text/javascript"></script>
+</head>
+<body>
+    <h3>Members</h3>
+    @foreach (var person in members)
+    {
+        <p>@person</p>
+    }
+    <p>The number of names in Members are @len</p> <p>The person at position 2 is @x</p>
+    <p>Kai is now in position @j</p>
+    <!--hehehehe-->
+    -------------------------------
+    <br />
+    @for (var i = 10; i < 21; i++)
+    {<p>Line @i</p>}
+
+    <!--hehehehe-->
+    -------------------------------
+    <br />
+    @{
+        var n = 0;
+        while (n < 5)
+        {
+            n += 1;
+            <p>Line @n</p>
+        }
+    }
+    <!--hehehehe-->
+    -------------------------------
+    <br />
+    @if (price > 30)
+    {
+        <p>The price is too high.</p>
+    }
+    else
+    {
+        <p>The price is OK.</p>
+    }
+    <!--hehehehe-->
+    -------------------------------
+    <br />
+    @switch (day)
+    {
+        case "Monday":
+            message = "This is the first weekday.";
+            break;
+        case "Thursday":
+            message = "Only one day before weekend.";
+            break;
+        case "Friday":
+            message = "Tomorrow is weekend!";
+            break;
+        default:
+            message = "Today is + day";
+            break;
+    }
+    <p>@message</p>
+    -------------------------------
+    <br />
+    @{ var myMessage = "Hello World"; }
+
+    <p>
+        The value of mymessage
+        is: @myMessage
+    </p>
+
+    @{
+        var greeting = "Welcome to our site!";
+        var weekDay = DateTime.Now.DayOfWeek;
+        var greetingMessage = greeting + " Here in Huston it is: " + weekDay;
+    }
+    <p>The greeting is: @greetingMessage</p>
+</body>
+</html>
+

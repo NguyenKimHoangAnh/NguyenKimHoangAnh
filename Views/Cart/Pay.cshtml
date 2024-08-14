@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "Payment";
+}
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        .StripeElement {
+            box-sizing: border-box;
+            height: 40px;
+            padding: 10px 12px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .StripeElement--focus {
+            border: 1px solid #007bff;
+        }
+
+        .StripeElement--invalid {
+            border: 1px solid #fa755a;
+        }
+
+        .StripeElement--webkit-autofill {
+            background-color: #fefde5 !important;
+        }
+
+        .vnpay-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+<body>
+    <div class="container mt-5">
+        <h2>Choose Payment</h2>
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <h4>Pay with Credit Card</h4>
+                <form id="payment-form" method="post" action="@Url.Action("PayWithCreditCard", "Cart")">
+                    <div id="card-element">
+                        <!-- A Stripe Element will be inserted here. -->
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Pay with Credit Card</button>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <h4>Pay with VNPay</h4>
+                <form id="vnpay-form" method="post" action="@Url.Action("PayWithVNPay", "Cart")">
+                    <!-- Optional: Add hidden inputs here if needed -->
+                    <button type="submit" class="btn vnpay-btn mt-3">Pay with VNPay</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Stripe integration
+        var stripe = Stripe('YOUR_PUBLISHABLE_KEY'); // Replace YOUR_PUBLISHABLE_KEY with your public key
+        var elements = stripe.elements();
+
+        var card = elements.create('card');
+        card.mount('#card-element');
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                    // Display error to user
+                    console.error(result.error.message);
+                } else {
+                    // Send token to server
+                    var hiddenInput = document.createElement('input');
+                    hiddenInput.setAttribute('type', 'hidden');
+                    hiddenInput.setAttribute('name', 'stripeToken');
+                    hiddenInput.setAttribute('value', result.token.id);
+                    form.appendChild(hiddenInput);
+
+                    form.submit();
+                }
+            });
+        });
+
+        // VNPay integration
+        var vnpayForm = document.getElementById('vnpay-form');
+        vnpayForm.addEventListener('submit', function (event) {
+            //Optional: Add any additional parameters for VNPay here if needed
+            // Example: You might set a hidden input with transaction amount or order ID
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'orderID');
+            hiddenInput.setAttribute('value', '12345');
+            vnpayForm.appendChild(hiddenInput);
+
+            // Optionally prevent the default form submission if needed
+            // event.preventDefault();
+        });
+    </script>
+</body>
+</html>
