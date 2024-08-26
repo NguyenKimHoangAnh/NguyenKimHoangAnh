@@ -1,0 +1,64 @@
+﻿@model NguyenKimHoangAnh.Context.Brand
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Detail</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <div class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__wobble" src="~/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+        </div>
+
+        @Html.Partial("~/Areas/Admin/Views/Home/Header.cshtml")
+        @Html.Partial("~/Areas/Admin/Views/Home/Sidebar.cshtml")
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <h2> Detail</h2>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.BrandName)
+                        <p class="form-control-static">@Model.BrandName</p>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ImageUrl)
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Url.Content("~/images/brands/" + Model.ImageUrl)" alt="Brand Image" style="width: 200px; height: auto;" />
+                        }
+                        else
+                        {
+                            <p>No Image</p>
+                        }
+                    </div>
+
+                    <a href="@Url.Action("Edit", new { id = Model.BrandId })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+                </div>
+            </section>
+            <!-- /.content -->
+
+            @Html.Partial("~/Areas/Admin/Views/Home/Footer.cshtml")
+        </div>
+        <!-- ./content-wrapper -->
+        <!-- REQUIRED SCRIPTS -->
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+        <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/dist/js/adminlte.min.js"></script>
+    </div>
+    <!-- ./wrapper -->
+</body>
+</html>

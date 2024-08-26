@@ -1,0 +1,103 @@
+﻿@model IEnumerable<NguyenKimHoangAnh.Context.Product>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <div class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__wobble" src="~/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+        </div>
+
+        @Html.Partial("~/Areas/Admin/Views/Home/Header.cshtml")
+        @Html.Partial("~/Areas/Admin/Views/Home/Sidebar.cshtml")
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <h2>Product</h2>
+
+                    <p>
+                        @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-primary" })
+                    </p>
+
+                    <table class="table table-striped">
+                         <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Image</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Brand</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var product in Model)
+                                {
+                                    <tr>
+                                        <td>@product.Id</td>
+                                        <td>@product.Name</td>
+                                        <td>@product.Price.ToString("C")</td>                                  
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                            {
+                                                <img src="@Url.Content("~/images/pro/" + product.ImageUrl)" alt="@product.Name" style="width: 100px; height: auto;" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@Url.Content("~/images/pro/default.png")" alt="No Image" style="width: 100px; height: auto;" />
+                                            }
+                                        </td>
+                                        <td>@product.Description</td>
+                                        <td>@(product.Category != null ? product.Category.Name : "No Category")</td>
+                                        <td>@(product.Brand != null ? product.Brand.BrandName : "No Brand")</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                @Html.ActionLink("Edit", "Edit", new { id = product.Id }, new { @class = "btn btn-sm btn-warning", @style = "margin-right: 2px;" })
+                                                @Html.ActionLink("Detail", "Detail", new { id = product.Id }, new { @class = "btn btn-sm btn-info", @style = "margin-right: 2px;" })
+                                                @Html.ActionLink("Delete", "Delete", new { id = product.Id }, new { @class = "btn btn-sm btn-danger" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8">No products found.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <!-- /.content -->
+
+            @Html.Partial("~/Areas/Admin/Views/Home/Footer.cshtml")
+        </div>
+        <!-- ./content-wrapper -->
+        <!-- REQUIRED SCRIPTS -->
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+        <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/dist/js/adminlte.min.js"></script>
+    </div>
+    <!-- ./wrapper -->
+</body>
+</html>

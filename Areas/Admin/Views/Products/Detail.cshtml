@@ -1,0 +1,77 @@
+﻿@model NguyenKimHoangAnh.Context.Product
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Detail</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        @Html.Partial("~/Areas/Admin/Views/Home/Header.cshtml")
+        @Html.Partial("~/Areas/Admin/Views/Home/Sidebar.cshtml")
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <h2> Detail</h2>
+
+                    <div class="form-group">
+                        <label>ID</label>
+                        <p>@Model.Id</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Name</label>
+                        <p>@Model.Name</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Price</label>
+                        <p>@Model.Price.ToString("C")</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <p>@Model.Description</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category</label>
+                        <p>@(Model.Category != null ? Model.Category.Name : "No Category")</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Brand</label>
+                        <p>@(Model.Brand != null ? Model.Brand.BrandName : "No Brand")</p>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <img src="~/images/pro/@Model.ImageUrl" alt="Product Image" width="150" height="150" class="img-thumbnail" />
+                    </div>
+
+                    <a href="@Url.Action("Index", "Products")" class="btn btn-secondary">Back to List</a>
+                </div>
+            </section>
+            <!-- /.content -->
+
+            @Html.Partial("~/Areas/Admin/Views/Home/Footer.cshtml")
+        </div>
+        <!-- ./content-wrapper -->
+        <!-- REQUIRED SCRIPTS -->
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+        <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/dist/js/adminlte.min.js"></script>
+    </div>
+    <!-- ./wrapper -->
+</body>
+</html>

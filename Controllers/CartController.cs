@@ -1,14 +1,19 @@
 ﻿using NguyenKimHoangAnh.Context;
+using Stripe;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace NguyenKimHoangAnh.Controllers
 {
     public class CartController : Controller
     {
-        private ASPEntities1 _context = new ASPEntities1();
+        private ASPEntities _context = new ASPEntities();
 
         // GET: Cart
         public ActionResult Index()
@@ -16,10 +21,21 @@ namespace NguyenKimHoangAnh.Controllers
             var cart = Session["Cart"] as List<Cart> ?? new List<Cart>();
             var total = cart.Sum(c => c.TotalPrice);
 
-            ViewBag.Total = total.ToString("C", new CultureInfo("vi-VN"));
+            // Kiểm tra giá trị của session
+            if (cart != null)
+            {
+                ViewBag.Total = total.ToString("C", new CultureInfo("vi-VN"));
+                ViewBag.CartItemCount = cart.Count;
+            }
+            else
+            {
+                ViewBag.Total = "0";
+                ViewBag.CartItemCount = 0;
+            }
 
             return View(cart);
         }
+
 
         // GET: ProductList
         public ActionResult ProductList()
@@ -56,12 +72,14 @@ namespace NguyenKimHoangAnh.Controllers
                 {
                     ProductId = productId,
                     ProductName = product.Name,
-                    ProductImage = product.ImageUrl,
+                    ProductImage = product.ImageUrl, // Đây là nơi bạn gán ảnh
                     Quantity = quantity,
                     Price = product.Price,
                     TotalPrice = product.Price * quantity
                 };
                 cart.Add(newItem);
+                // Kiểm tra giá trị ProductImage
+                Console.WriteLine($"ProductImage: {newItem.ProductImage}");
             }
 
             Session["Cart"] = cart;
@@ -71,7 +89,7 @@ namespace NguyenKimHoangAnh.Controllers
             return Json(new
             {
                 Message = "Sản phẩm đã được thêm vào giỏ hàng!",
-                Count = cart.Count,
+                Count = cart.Sum(c => c.Quantity), // Số lượng sản phẩm
                 Total = total.ToString("C", new CultureInfo("vi-VN"))
             });
         }
@@ -123,5 +141,69 @@ namespace NguyenKimHoangAnh.Controllers
 
             return Json(new { Message = "Sản phẩm không tồn tại trong giỏ hàng" });
         }
+
+        private const string stripeSecretKey = "pk_test_4eC39HqLyjWDarjtT1zdp7dc"; // Thay thế bằng khóa bí mật thực tế của bạn
+
+        public ActionResult Payment()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PayWithCreditCard(string stripeToken)
+        {
+            StripeConfiguration.ApiKey = stripeSecretKey;
+
+            var options = new ChargeCreateOptions
+            {
+                Amount = 5000, // Amount in cents
+                Currency = "usd",
+                Description = "Example charge",
+                Source = stripeToken,
+            };
+            var service = new ChargeService();
+            Charge charge = await service.CreateAsync(options);
+
+            if (charge.Status == "succeeded")
+            {
+                return RedirectToAction("PaymentReturn", new { message = "Payment succeeded!" });
+            }
+
+            return RedirectToAction("PaymentReturn", new { message = "Payment failed!" });
+        }
+
+        [HttpPost]
+        public ActionResult PayWithVNPay(string orderID)
+        {
+            // Your VNPay integration logic here
+            // Redirect to VNPay payment URL
+            return RedirectToAction("PaymentReturn", new { message = "Processing VNPay payment!" });
+        }
+
+        public ActionResult PaymentReturn(string message)
+        {
+            ViewBag.Message = message;
+            return View();
+        }
+
+
+        private decimal GetCartTotal(string currency)
+        {
+            var cart = Session["Cart"] as List<Cart> ?? new List<Cart>();
+            if (currency == "USD")
+            {
+                // Giả sử giá trị USD
+                return cart.Sum(c => c.TotalPrice / 23000); // Chuyển đổi VND sang USD với tỷ giá giả sử là 1 USD = 23000 VND
+            }
+            else if (currency == "VND")
+            {
+                // Giá trị VND
+                return cart.Sum(c => c.TotalPrice);
+            }
+            return 0;
+        }
+
+
     }
+
 }

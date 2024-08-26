@@ -8,17 +8,23 @@ namespace NguyenKimHoangAnh.Controllers
 {
     public class UserController : Controller
     {
-        private ASPEntities1 _context;
+        private ASPEntities _context;
 
         public UserController()
         {
-            _context = new ASPEntities1();
+            _context = new ASPEntities();
         }
 
         // GET: User/Login
         [HttpGet]
         public ActionResult Login()
         {
+            return View();
+        }
+        public ActionResult Index()
+        {
+            var user = _context.Users.FirstOrDefault(); // Hoặc cách lấy dữ liệu của bạn
+            ViewBag.ImageUrl = user?.ImageUrl; // Cấp giá trị cho ViewBag
             return View();
         }
 

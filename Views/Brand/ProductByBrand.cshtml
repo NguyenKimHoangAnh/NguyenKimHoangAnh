@@ -1,0 +1,124 @@
+﻿@model IEnumerable<NguyenKimHoangAnh.Context.Product>
+
+@{
+    ViewBag.Title = "Products by Brand";
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    // Handle Add to Cart form submission
+    $('.add-to-cart-form').on('submit', function (event) {
+        event.preventDefault();
+
+        var $form = $(this);
+        var $message = $form.siblings('.product-message');
+
+        $.ajax({
+            url: $form.attr('action'),
+            type: 'POST',
+            data: $form.serialize(),
+            success: function (response) {
+                console.log('Add to Cart response:', response);
+
+                if (response.CartCount !== undefined) {
+                    $message.text('Product has been added to the cart!').show();
+                    setTimeout(function () {
+                        $message.fadeOut();
+                    }, 3000);
+
+                    $('.notify').text(response.CartCount).show();
+                } else {
+                    $message.text('An error occurred. Please try again.').show();
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error:', textStatus, errorThrown);
+                $message.text('An error occurred. Please try again.').show();
+                setTimeout(function () {
+                    $message.fadeOut();
+                }, 3000);
+            }
+        });
+    });
+
+    // Update cart item count in the cart icon
+    $.ajax({
+        url: '@Url.Action("Index", "Cart")',
+        type: 'GET',
+        success: function (response) {
+            if (response.Count > 0) {
+                $('.notify-cart').text(response.Count).show();
+            }
+        },
+        error: function () {
+            console.error("Error retrieving cart item count");
+        }
+    });
+});
+</script>
+
+<section class="section-content padding-y">
+    <div class="container">
+        <header class="border-bottom mb-4 pb-3">
+            <div class="form-inline">
+                <span class="mr-md-auto">@Model.Count() Items found for @ViewBag.BrandName</span>
+            </div>
+        </header>
+
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-3">
+                    <figure class="card card-product-grid">
+                        <div class="img-wrap">
+                            <a href="@Url.Action("ProductDetail", "Product", new { id = product.Id })"><img src="~/images/pro/@product.ImageUrl"></a>
+                        </div>
+                        <figcaption class="info-wrap">
+                            <div class="fix-height">
+                                <a href="@Url.Action("ProductDetail", "Product", new { id = product.Id })" class="title">@product.Name</a>
+                                <div class="price-wrap1 mt-2">
+                                    <span class="price">@product.Price.ToString("N0") VND</span>
+                                </div>
+                                <p>@product.Description</p>
+                            </div>
+                            <form class="add-to-cart-form" method="post" action="@Url.Action("AddToCart", "Cart")">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Cart
+                                </button>
+                            </form>
+
+                            <!-- Thông báo dưới sản phẩm -->
+                            <div class="alert alert-success product-message mt-2" style="display: none;">
+                                Product has been added to the cart!
+                            </div>
+                        </figcaption>
+                    </figure>
+                </div>
+            }
+        </div>
+
+        <nav class="mb-4" aria-label="Page navigation sample">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Previous</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>

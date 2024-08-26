@@ -1,0 +1,75 @@
+﻿@model IEnumerable<NguyenKimHoangAnh.Context.Category>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        @Html.Partial("~/Areas/Admin/Views/Home/Header.cshtml")
+        @Html.Partial("~/Areas/Admin/Views/Home/Sidebar.cshtml")
+
+        <div class="content-wrapper">
+            <section class="content">
+                <div class="container-fluid">
+                    <h2>Categories</h2>
+
+                    <p>
+                        @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-primary" })
+                    </p>
+
+                    <table class="table table-striped">
+                         <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Model)
+                            {
+                                <tr>
+                                    <td>@category.CategoryId</td>
+                                    <td>@category.Name</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(category.ImageUrl))
+                                        {
+                                            <img src="~/images/cate/@category.ImageUrl" alt="Category Image" width="50" height="50" class="img-thumbnail" />
+                                        }
+                                        else
+                                        {
+                                            <span>No Image</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            @Html.ActionLink("Edit", "Edit", new { id = category.CategoryId }, new { @class = "btn btn-sm btn-warning" })
+                                            @Html.ActionLink("Detail", "Detail", new { id = category.CategoryId }, new { @class = "btn btn-sm btn-info" })
+                                            @using (Html.BeginForm("Delete", "Category", new { id = category.CategoryId }, FormMethod.Post, new { @class = "d-inline" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            @Html.Partial("~/Areas/Admin/Views/Home/Footer.cshtml")
+        </div>
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+        <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/dist/js/adminlte.min.js"></script>
+    </div>
+</body>
+</html>

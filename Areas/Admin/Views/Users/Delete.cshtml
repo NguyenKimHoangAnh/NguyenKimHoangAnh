@@ -1,0 +1,60 @@
+﻿@model NguyenKimHoangAnh.Context.User
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete </title>
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        @Html.Partial("~/Areas/Admin/Views/Home/Header.cshtml")
+        @Html.Partial("~/Areas/Admin/Views/Home/Sidebar.cshtml")
+
+        <div class="content-wrapper">
+            <section class="content">
+                <div class="container-fluid">
+                    <h2>Delete</h2>
+                    <div class="alert alert-danger">
+                        <strong>Warning!</strong> Are you sure you want to delete this user?
+                    </div>
+                    <dl class="row">
+                        <dt class="col-sm-3">First Name</dt>
+                        <dd class="col-sm-9">@Model.FirstName</dd>
+                        <dt class="col-sm-3">Last Name</dt>
+                        <dd class="col-sm-9">@Model.LastName</dd>
+                        <dt class="col-sm-3">Email</dt>
+                        <dd class="col-sm-9">@Model.Email</dd>
+                        <dt class="col-sm-3">Image</dt>
+                        <dd class="col-sm-9">
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <img src="@Url.Content("~/images/user/" + Model.ImageUrl)" alt="User Image" style="width: 100px; height: auto;" />
+                            }
+                            else
+                            {
+                                <img src="@Url.Content("~/images/user/default.png")" alt="No Image" style="width: 100px; height: auto;" />
+                            }
+                        </dd>
+                    </dl>
+                    @using (Html.BeginForm("Delete", "Users", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Id)
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        @Html.ActionLink("Cancel", "Index", new { @class = "btn btn-secondary" })
+                    }
+                </div>
+            </section>
+
+            @Html.Partial("~/Areas/Admin/Views/Home/Footer.cshtml")
+        </div>
+    </div>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/dist/js/adminlte.min.js"></script>
+</body>
+</html>

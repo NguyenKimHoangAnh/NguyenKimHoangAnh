@@ -1,0 +1,47 @@
+﻿@model NguyenKimHoangAnh.Context.Category
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete</title>
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        @Html.Partial("~/Areas/Admin/Views/Home/Header.cshtml")
+        @Html.Partial("~/Areas/Admin/Views/Home/Sidebar.cshtml")
+
+        <div class="content-wrapper">
+            <section class="content">
+                <div class="container-fluid">
+                    <h2>Delete</h2>
+
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> Are you sure you want to delete this category?
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name)
+                        <p class="form-control-static">@Model.Name</p>
+                    </div>
+
+                    @using (Html.BeginForm("Delete", "Category", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.CategoryId)
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        @Html.ActionLink("Back to List", "Index", new { @class = "btn btn-secondary" })
+                    }
+                </div>
+            </section>
+            @Html.Partial("~/Areas/Admin/Views/Home/Footer.cshtml")
+        </div>
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+        <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/dist/js/adminlte.min.js"></script>
+    </div>
+</body>
+</html>

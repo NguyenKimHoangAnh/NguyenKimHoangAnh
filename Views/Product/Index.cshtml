@@ -5,44 +5,56 @@
     .price-wrap1 {
         text-align: left;
     }
+
+    .card-product-grid .info-wrap {
+        flex: 2; /* Phần mô tả chiếm nhiều không gian hơn */
+        overflow: hidden; /* Ẩn phần mô tả dài */
+    }
+
+        .card-product-grid .info-wrap p {
+            margin: 0;
+            text-overflow: ellipsis; /* Hiển thị dấu ba chấm nếu mô tả quá dài */
+            white-space: nowrap; /* Không gói dòng */
+            overflow: hidden; /* Ẩn phần văn bản vượt quá khung */
+        }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function () {
-    // Xử lý việc thêm sản phẩm vào giỏ hàng khi form được gửi
+    // Handle adding product to cart when form is submitted
     $('.add-to-cart-form').on('submit', function (event) {
-        event.preventDefault(); // Ngăn gửi form theo cách thông thường
+        event.preventDefault(); // Prevent form from submitting the traditional way
 
-        var $form = $(this); // Lấy đối tượng form hiện tại
-        var $message = $form.siblings('.product-message'); // Lấy thông báo của sản phẩm hiện tại
+        var $form = $(this); // Get the current form object
+        var $message = $form.siblings('.product-message'); 
 
         $.ajax({
             url: $form.attr('action'),
             type: 'POST',
             data: $form.serialize(),
             success: function (response) {
-                console.log('Add to Cart response:', response); // Kiểm tra phản hồi
+                console.log('Add to Cart response:', response); // Check the response
 
-                // Hiển thị thông báo khi thêm sản phẩm vào giỏ hàng thành công
-                $message.text('Sản phẩm đã được thêm vào giỏ hàng!').show();
+                // Show message when product is successfully added to cart
+                $message.text('Product has been added to the cart!').show();
 
-                // Tùy chọn: Ẩn thông báo sau một khoảng thời gian
+                // Optional: Hide the message after a delay
                 setTimeout(function () {
                     $message.fadeOut();
                 }, 3000);
 
-                // Cập nhật số lượng sản phẩm trong giỏ hàng
+                // Update the cart item count
                 if (response.CartCount > 0) {
-                    $('.notify').text(response.CartCount).show(); // Cập nhật số lượng và hiển thị
+                    $('.notify').text(response.CartCount).show(); // Update and show the count
                 } else {
 
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.error('Error:', textStatus, errorThrown); // Kiểm tra lỗi
-                $message.text('Có lỗi xảy ra. Vui lòng thử lại.').show();
+                console.error('Error:', textStatus, errorThrown); // Check for errors
+                $message.text('An error occurred. Please try again.').show();
 
-                // Tùy chọn: Ẩn thông báo sau một khoảng thời gian
+                // Optional: Hide the message after a delay
                 setTimeout(function () {
                     $message.fadeOut();
                 }, 3000);
@@ -50,49 +62,38 @@ $(document).ready(function () {
         });
     });
 
-    // Cập nhật số lượng thông báo cho My Profile nếu cần
+    // Update profile notification count if needed
     $.ajax({
-        url: '@Url.Action("Index", "Profile")', // Thay URL và controller/action phù hợp
+        url: '@Url.Action("Index", "Profile")', // Replace with appropriate URL and controller/action
         type: 'GET',
         success: function (response) {
-            console.log('Profile Notifications response:', response); // Kiểm tra phản hồi
+            console.log('Profile Notifications response:', response); // Check the response
 
             if (response.ProfileNotifications > 0) {
-                $('.notify-profile').text(response.ProfileNotifications).show(); // Cập nhật số lượng và hiển thị
+                $('.notify-profile').text(response.ProfileNotifications).show(); // Update and show the count
             } else {
 
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            console.error('Error:', textStatus, errorThrown); // Kiểm tra lỗi
+            console.error('Error:', textStatus, errorThrown); // Check for errors
         }
     });
+
     $.ajax({
         url: '@Url.Action("Index", "Cart")',
         type: 'GET',
         success: function (response) {
             if (response.Count > 0) {
-                $('.widget-header .notify-cart').text(response.Count).show(); // Cập nhật số lượng và hiển thị
+                $('.notify-cart').text(response.Count).show(); // Update and show the count
             } else {
             }
         },
         error: function () {
-            console.error("Lỗi khi lấy số lượng sản phẩm trong giỏ hàng");
+            console.error("Error retrieving cart item count");
         }
     });
-    $.ajax({
-    url: '@Url.Action("Index", "Cart")', // Thay thế URL và action phù hợp
-    type: 'GET',
-    success: function (response) {
-        if (response.Count > 0) {
-            $('.notify-cart').text(response.Count).show();
-        } else {
-        }
-    },
-    error: function () {
-        console.error("Lỗi khi lấy số lượng sản phẩm trong giỏ hàng");
-    }
-});
+
 
 });
 </script>
@@ -101,75 +102,11 @@ $(document).ready(function () {
     <section class="section-content padding-y">
         <div class="container">
 
-
-            <!-- ============================  FILTER TOP  ================================= -->
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-2">Filter by</div> <!-- col.// -->
-                        <div class="col-md-10">
-                            <ul class="list-inline">
-                                <li class="list-inline-item mr-3 dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">   Supplier type </a>
-                                    <div class="dropdown-menu p-3" style="max-width:400px;">
-                                        <label class="form-check">
-                                            <input type="radio" name="myfilter" class="form-check-input"> Good supplier
-                                        </label>
-                                        <label class="form-check">
-                                            <input type="radio" name="myfilter" class="form-check-input"> Best supplier
-                                        </label>
-                                        <label class="form-check">
-                                            <input type="radio" name="myfilter" class="form-check-input"> New supplier
-                                        </label>
-                                    </div> <!-- dropdown-menu.// -->
-                                </li>
-                                <li class="list-inline-item mr-3 dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">  Country </a>
-                                    <div class="dropdown-menu p-3">
-                                        <label class="form-check"> 	 <input type="checkbox" class="form-check-input"> China    </label>
-                                        <label class="form-check">   	 <input type="checkbox" class="form-check-input"> Japan      </label>
-                                        <label class="form-check">    <input type="checkbox" class="form-check-input"> Uzbekistan  </label>
-                                        <label class="form-check">  <input type="checkbox" class="form-check-input"> Russia     </label>
-                                    </div> <!-- dropdown-menu.// -->
-                                </li>
-                                <li class="list-inline-item mr-3 dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Feature</a>
-                                    <div class="dropdown-menu">
-                                        <a href="" class="dropdown-item">Anti backterial</a>
-                                        <a href="" class="dropdown-item">With buttons</a>
-                                        <a href="" class="dropdown-item">Extra safety</a>
-                                    </div>
-                                </li>
-                                <li class="list-inline-item mr-3"><a href="#">Color</a></li>
-                                <li class="list-inline-item mr-3"><a href="#">Size</a></li>
-                                <li class="list-inline-item mr-3">
-                                    <div class="form-inline">
-                                        <label class="mr-2">Price</label>
-                                        <input class="form-control form-control-sm" placeholder="Min" type="number">
-                                        <span class="px-2"> - </span>
-                                        <input class="form-control form-control-sm" placeholder="Max" type="number">
-                                        <button type="submit" class="btn btn-sm btn-light ml-2">Ok</button>
-                                    </div>
-                                </li>
-                                <li class="list-inline-item mr-3">
-                                    <label class="custom-control mt-1 custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input">
-                                        <div class="custom-control-label">
-                                            Ready to ship
-                                        </div>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div> <!-- col.// -->
-                    </div> <!-- row.// -->
-                </div> <!-- card-body .// -->
-            </div> <!-- card.// -->
             <!-- ============================ FILTER TOP END.// ================================= -->
 
             <header class="mb-3">
                 <div class="form-inline">
-                    <strong class="mr-md-auto">32 Items found </strong>
-                    <select class="mr-2 form-control">
+                    <strong class="mr-md-auto">@Model.Count() Items found</strong>                    <select class="mr-2 form-control">
                         <option>Latest items</option>
                         <option>Trending</option>
                         <option>Most Popular</option>
@@ -185,6 +122,7 @@ $(document).ready(function () {
                     </div>
                 </div>
             </header><!-- sect-heading -->
+
             @model IEnumerable<NguyenKimHoangAnh.Context.Product>
 
             <div class="row">
@@ -193,14 +131,13 @@ $(document).ready(function () {
                     <div class="col-md-3">
                         <figure class="card card-product-grid">
                             <div class="img-wrap">
-                                <span class="badge badge-danger"> NEW </span>
                                 <a href="@Url.Action("ProductDetail", "Product", new { id = product.Id })" class="img-wrap">
                                     <img src="~/images/pro/@product.ImageUrl" alt="@product.Name" />
                                 </a>
                             </div> <!-- img-wrap.// -->
                             <figcaption class="info-wrap">
                                 <div>@Html.ActionLink(product.Name, "ProductDetail", "Product", new { id = product.Id }, null)</div>
-                                
+
 
                                 <div class="price-wrap1">
                                     <span class="price h5">Price: @product.Price.ToString("N0")</span>
@@ -219,7 +156,7 @@ $(document).ready(function () {
 
                                 <!-- Thông báo dưới sản phẩm -->
                                 <div class="alert alert-success product-message mt-2" style="display: none;">
-                                    Sản phẩm đã được thêm vào giỏ hàng!
+                                    Product has been added to the cart!
                                 </div>
                             </figcaption>
                         </figure>
@@ -227,427 +164,6 @@ $(document).ready(function () {
                 }
 
 
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <img src="~/images/items/2.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">High Quality Winter PU Rain Jacket with Padding for Men's outdoor</a>
-                            <div class="price-wrap">
-                                <span class="price">$50.00-$75.00</span>
-                                <small class="text-muted">/per item</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 4 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Great manufacturer Co ltd.</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 3 Years </span>
-                                <span class="tag"> 70 reviews </span>
-                                <span class="tag"> Russia </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <img src="~/images/items/3.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$425.00-$490.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Best textile company Ltd.</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 7 Years </span>
-                                <span class="tag"> 34 reviews </span>
-                                <span class="tag"> Russia </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <img src="~/images/items/4.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Guangzhou Yichuang Electronic Co</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <img src="~/images/items/5.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Guangzhou Yichuang Electronic Co</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <img src="~/images/items/6.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Guangzhou Electronic Co</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <img src="~/images/items/15.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Pro Electronic Ltd</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <img src="~/images/items/1.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Guangzhou Yichuang Electronic Co</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <span class="badge badge-danger"> NEW </span>
-                            <img src="~/images/items/2.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Guangzhou Yichuang Electronic Co</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <span class="badge badge-danger"> NEW </span>
-                            <img src="~/images/items/3.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Guangzhou Yichuang Electronic Co</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <span class="badge badge-danger"> NEW </span>
-                            <img src="~/images/items/4.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Guangzhou Yichuang Electronic Co</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
-
-                <div class="col-md-3">
-                    <figure class="card card-product-grid">
-                        <div class="img-wrap">
-                            <span class="badge badge-danger"> NEW </span>
-                            <img src="~/images/items/1.jpg">
-                        </div> <!-- img-wrap.// -->
-                        <figcaption class="info-wrap">
-                            <a href="#" class="title mb-2">Cheap and Best demo clothe with latest Fashion styles for Men</a>
-                            <div class="price-wrap">
-                                <span class="price">$325.00-$390.00</span>
-                                <small class="text-muted">/per bag</small>
-                            </div> <!-- price-wrap.// -->
-
-                            <p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>
-
-                            <p class="text-muted ">Guangzhou Yichuang Electronic Co</p>
-
-                            <hr>
-
-                            <p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 4 Years </span>
-                                <span class="tag"> 60 reviews </span>
-                                <span class="tag"> China </span>
-                            </p>
-
-                            <label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>
-
-                            <a href="#" class="btn btn-outline-primary"> <i class="fa fa-envelope"></i> Contact supplier </a>
-
-                        </figcaption>
-                    </figure>
-                </div> <!-- col.// -->
             </div> <!-- row end.// -->
 
 

@@ -6,13 +6,15 @@ using System.Web.Mvc;
 
 public class ProductController : Controller
 {
-    private ASPEntities1 _context = new ASPEntities1();
+    private ASPEntities _context = new ASPEntities();
 
     public ActionResult Index()
     {
-        var listProduct = _context.Products.ToList();
-        return View(listProduct);
+        var products = _context.Products.ToList();
+        ViewBag.ItemCount = products.Count;
+        return View(products);
     }
+
 
 
     public ActionResult ProductDetail(int id)

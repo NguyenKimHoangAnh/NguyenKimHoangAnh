@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 public class CategoriesController : Controller
 {
-    private ASPEntities1 _context = new ASPEntities1();
+    private ASPEntities _context = new ASPEntities();
     public ActionResult Index()
     {
         var categories = _context.Categories.ToList();

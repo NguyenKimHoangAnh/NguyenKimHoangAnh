@@ -1,0 +1,76 @@
+﻿@model NguyenKimHoangAnh.Context.Cart
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create </title>
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        @Html.Partial("~/Areas/Admin/Views/Home/Header.cshtml")
+        @Html.Partial("~/Areas/Admin/Views/Home/Sidebar.cshtml")
+
+        <div class="content-wrapper">
+            <section class="content">
+                <div class="container-fluid">
+                    <h2>Create </h2>
+
+                    @using (Html.BeginForm("Create", "Carts", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ProductId)
+                            @Html.TextBoxFor(model => model.ProductId, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ProductId)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ProductName)
+                            @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ProductName)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ProductImage)
+                            @Html.TextBoxFor(model => model.ProductImage, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ProductImage)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Quantity)
+                            @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Quantity)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Price)
+                            @Html.TextBoxFor(model => model.Price, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Price)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TotalPrice)
+                            @Html.TextBoxFor(model => model.TotalPrice, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.TotalPrice)
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+                        </div>
+                    }
+                </div>
+            </section>
+            @Html.Partial("~/Areas/Admin/Views/Home/Footer.cshtml")
+        </div>
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+        <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/dist/js/adminlte.min.js"></script>
+    </div>
+</body>
+</html>

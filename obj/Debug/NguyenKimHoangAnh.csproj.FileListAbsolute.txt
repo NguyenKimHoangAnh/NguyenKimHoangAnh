@@ -81,3 +81,11 @@ D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\EntityFramework.dll
 D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\EntityFramework.SqlServer.dll
 D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\EntityFramework.xml
 D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\EntityFramework.SqlServer.xml
+D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\Stripe.net.dll
+D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\System.Threading.Tasks.Extensions.dll
+D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\Microsoft.Bcl.AsyncInterfaces.xml
+D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\Stripe.net.xml
+D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\NguyenKimHoangAnh\NguyenKimHoangAnh\bin\System.Threading.Tasks.Extensions.xml

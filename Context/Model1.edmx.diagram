@@ -4,14 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="79270c284a20465fb156128816032229" Name="Diagram1">
+      <Diagram DiagramId="69a8c261e9944cdcbd766f34eb02102d" Name="Diagram1">
+        <EntityTypeShape EntityType="ASPModel.Brand" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ASPModel.Cart" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ASPModel.Category" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ASPModel.Order" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ASPModel.OrderItem" Width="1.5" PointX="5.25" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ASPModel.Product" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="ASPModel.sysdiagram" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ASPModel.User" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
-        <AssociationConnector Association="ASPModel.FK_Cart_Product" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ASPModel.Category" Width="1.5" PointX="0.75" PointY="1.375" />
-        <AssociationConnector Association="ASPModel.FK_Product_Category" />
+        <EntityTypeShape EntityType="ASPModel.sysdiagram" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ASPModel.User" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="ASPModel.FK__Product__BrandId__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="ASPModel.FK__Cart__OrderId__6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="ASPModel.FK__Cart__ProductId__6EF57B66" ManuallyRouted="false" />
+        <AssociationConnector Association="ASPModel.FK__Product__Categor__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="ASPModel.FK__OrderItem__Order__72C60C4A" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

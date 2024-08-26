@@ -6,11 +6,11 @@ namespace NguyenKimHoangAnh.Controllers
 {
     public class ProfileController : Controller
     {
-        private ASPEntities1 _context;
+        private ASPEntities _context;
 
         public ProfileController()
         {
-            _context = new ASPEntities1();
+            _context = new ASPEntities();
         }
 
         // GET: Profile/Index
@@ -30,7 +30,15 @@ namespace NguyenKimHoangAnh.Controllers
 
             return View(user);
         }
+        [HttpPost]
+        public ActionResult Logout()
+        {
+            // Xóa thông tin người dùng từ session
+            HttpContext.Session.Clear();
 
+            // Điều hướng về trang chính
+            return RedirectToAction("Index", "Home");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

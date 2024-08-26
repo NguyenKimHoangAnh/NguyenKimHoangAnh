@@ -13,10 +13,10 @@ namespace NguyenKimHoangAnh.Context
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ASPEntities1 : DbContext
+    public partial class ASPEntities : DbContext
     {
-        public ASPEntities1()
-            : base("name=ASPEntities1")
+        public ASPEntities()
+            : base("name=ASPEntities")
         {
         }
     
@@ -25,10 +25,13 @@ namespace NguyenKimHoangAnh.Context
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
     }
 }

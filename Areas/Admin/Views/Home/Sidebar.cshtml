@@ -1,0 +1,119 @@
+﻿
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="@Url.Action("Index","Home")" class="brand-link">
+        <img src="~/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">AdminLTE 3</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                @if (Session["image"] != null)
+                {
+                    <img src="@Url.Content(Session["image"].ToString())" class="img-circle elevation-1" />
+                }
+                else
+                {
+                    <img src="~/images/pro/1705235130_new_11.jpg" class="img-circle elevation-1" />
+                }
+            </div>
+            <div class="info">
+                @if (Session["username"] != null)
+                {
+                    <a href="#" class="d-block">@Session["firstname"] @Session["lastname"]</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Login", "Home", new { area = "Admin" })" class="d-block">Login</a>
+                }
+            </div>
+        </div>
+
+
+
+
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item menu-open">
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index","Home")" class="nav-link ">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Category")" class="nav-link">
+                        <i class="fas fa-list " style="margin-right: 8px;"></i>
+                        <p>Category</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Brands")" class="nav-link">
+                        <i class="fas fa-copyright" style="margin-right: 8px;"></i>
+                        <p>Brand</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Products")" class="nav-link">
+                        <i class="fas fa-box" style="margin-right: 8px;"></i>
+                        <p>Product</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Orders")" class="nav-link">
+                        <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i>
+                        <p>Order</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="nav-link">
+                        <i class="fas fa-users" style="margin-right: 8px;"></i>
+                        <p> User</p>
+                    </a>
+                </li>
+
+
+                <li class="nav-header">LABELS</li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-circle text-danger"></i>
+                        <p class="text">Important</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-circle text-warning"></i>
+                        <p>Warning</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-circle text-info"></i>
+                        <p>Informational</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
